@@ -1,4 +1,4 @@
-import semverCompare from "semver/functions/compare";
+import { compare } from "semver";
 import type { AnySchema } from "./schema";
 import type { LibraryConfig } from "./shared/config";
 import type { AbstractQuery } from "./query";
@@ -85,9 +85,7 @@ export type InferAbstractQuery<
 export function fumadb<Schemas extends AnySchema[]>(
   config: LibraryConfig<Schemas>
 ): FumaDBFactory<Schemas> {
-  const schemas = config.schemas.sort((a, b) =>
-    semverCompare(a.version, b.version)
-  );
+  const schemas = config.schemas.sort((a, b) => compare(a.version, b.version));
   return {
     names: createNameVariantsBuilder(config.namespace, schemas, (schemas) => {
       return fumadb({
