@@ -13,6 +13,7 @@ export interface MongoDBConfig {
 
 export function mongoAdapter(options: MongoDBConfig): FumaDBAdapter {
   return {
+    name: "mongodb",
     createORM(schema) {
       return fromMongoDB(schema, options.client);
     },

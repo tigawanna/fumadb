@@ -20,6 +20,7 @@ interface ModelNames {
 
 export function kyselyAdapter(config: KyselyConfig): FumaDBAdapter {
   return {
+    name: "kysely",
     createORM(schema) {
       return fromKysely(schema, config);
     },

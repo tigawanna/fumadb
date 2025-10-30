@@ -16,6 +16,11 @@ export interface FumaDBAdapterContext extends LibraryConfig {}
 
 export interface FumaDBAdapter {
   /**
+   * Name of the adapter
+   */
+  name: string;
+
+  /**
    * Generate ORM schema based on FumaDB Schema
    */
   generateSchema?: (
