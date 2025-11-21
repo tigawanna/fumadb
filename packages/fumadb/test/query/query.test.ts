@@ -264,3 +264,24 @@ test.each(prismaTests)(
     );
   }
 );
+
+test.each(prismaTests)(
+  "prisma getSchemaVersion should not cause unique constraint violation on concurrent calls ($provider)",
+  { timeout: Infinity },
+  async (item) => {
+    const client = await initPrismaClient(myDB, "1.0.0", item.provider);
+
+    // Call version() multiple times concurrently
+    // This should not cause unique constraint violation
+    const concurrentCalls = Array(10)
+      .fill(null)
+      .map(() => client.version());
+
+    const results = await Promise.all(concurrentCalls);
+
+    // All calls should return the same version without errors
+    for (const result of results) {
+      expect(result).toBe("1.0.0");
+    }
+  }
+);
