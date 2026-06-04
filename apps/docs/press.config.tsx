@@ -3,22 +3,21 @@ import { fumadocsMdx } from "fumapress/adapters/mdx";
 import { flexsearchPlugin } from "fumapress/plugins/flexsearch";
 import { llmsPlugin } from "fumapress/plugins/llms.txt";
 import { takumiPlugin } from "fumapress/plugins/takumi";
-import { loader } from "fumadocs-core/source";
 import { docs } from "./.source/server";
 import { lucideIconsPlugin } from "fumadocs-core/source/plugins/lucide-icons";
 import { createDocsLayoutPage } from "fumapress/layouts/docs";
 import { createHomeLayout } from "fumapress/layouts/home";
+import { imagePlugin } from "fumapress/plugins/image/vercel";
+import { sitemapPlugin } from "fumapress/plugins/sitemap";
+import { linkValidationPlugin } from "fumapress/plugins/link-validation";
 
 const config = defineConfig({
-  loader: loader(
-    docs.toFumadocsSource({
-      baseDir: "docs",
-    }),
-    {
-      baseUrl: "/",
-      plugins: [lucideIconsPlugin()],
-    },
-  ),
+  content: docs.toFumadocsSource({
+    baseDir: "docs",
+  }),
+  loaderOptions: {
+    plugins: [lucideIconsPlugin()],
+  },
   site: {
     name: "FumaDB",
     baseUrl: "https://fumadb.vercel.app",
@@ -43,8 +42,15 @@ const config = defineConfig({
     },
   },
 })
-  .usePlugins(flexsearchPlugin(), llmsPlugin(), takumiPlugin())
-  .useAdapters(fumadocsMdx())
+  .plugins(
+    flexsearchPlugin(),
+    llmsPlugin(),
+    takumiPlugin(),
+    linkValidationPlugin(),
+    imagePlugin(),
+    sitemapPlugin(),
+  )
+  .adapters(fumadocsMdx())
   .useLayouts({
     page: createDocsLayoutPage({
       render() {
